@@ -1,0 +1,46 @@
+.ant-table-thead {
+
+    > tr {
+        > th {
+            font-weight: @font-weight-bold
+        }
+    }
+
+    th {
+        &.ant-table-column-has-sorters {
+            &:hover {
+                & when (@theme = light) {
+                    background: #f2f2f2;
+                }
+
+                & when (@theme = dark) {
+                    background: darken(@table-header-sort-bg, 2%);
+                }
+            }
+        }
+    }
+}
+
+.ant-table-fixed-header {
+
+    .ant-table-thead {
+        >tr {
+            >th {
+                & when (@theme = light) {
+                    background: @gray-lightest;
+                }
+            }
+        }
+    }
+}
+
+tr.ant-table-expanded-row:hover>td, 
+tr.ant-table-expanded-row>td {
+    background: @component-background;
+}
+
+.ant-table-content {
+    .screen-mobile ({
+        overflow-x: auto;
+    });
+}

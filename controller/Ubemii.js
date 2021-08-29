@@ -34,6 +34,7 @@ const GetSubscribedCourseCategories = async () => {
     }
   });
 }
+
 const GetSubscribedInstructors = async (limit = 500) => {
   const params = `page=1&page_size=${limit}&is_archived=false`;
   const token = await GetUdemyToken();
@@ -46,9 +47,24 @@ const GetSubscribedInstructors = async (limit = 500) => {
   });
 }
 
+const GetCourseDetail = async (courseId) => {
+  const params = `fields[course]=title,headline,image_240x135,context_info,primary_category,primary_subcategory,avg_rating_recent,visible_instructors,locale,estimated_content_length,num_subscribers,description`;
+  const token = await GetUdemyToken();
+  const response = await axios.get(UDEMY_API_BASE + `/courses/${courseId}/?` + params, {
+    headers: {
+      "authorization": "Bearer " + token,
+      "x-udemy-authorization": "Bearer " + token,
+      "origin": "https://www.udemy.com"
+    }
+  });
+  console.log(response);
+  return response;
+}
+
 module.exports = {
   GetUdemyToken,
   GetSubscribedCourses,
   GetSubscribedCourseCategories,
-  GetSubscribedInstructors
+  GetSubscribedInstructors,
+  GetCourseDetail
 }

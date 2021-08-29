@@ -2,13 +2,21 @@ const {BrowserWindow} = require("electron");
 const {createWindow, createLoginWindow} = require("./screens");
 const {GetLoginState} = require("./utils");
 const { ipcMain } = require('electron');
-const {GetSubscribedCourses} = require("./Ubemii");
+const {GetSubscribedCourses, GetSubscribedInstructors, GetSubscribedCourseCategories} = require("./Ubemii");
 
 const ipcListeners = () => {
   ipcMain.on('getSubscribedCourses', async (event, arg) => {
     const response = await GetSubscribedCourses();
     event.returnValue = response.data;
-  })
+  });
+  ipcMain.on('getSubscribedInstructors', async (event, arg) => {
+    const response = await GetSubscribedInstructors();
+    event.returnValue = response.data;
+  });
+  ipcMain.on('getSubscribedCourseCategories', async (event, arg) => {
+    const response = await GetSubscribedCourseCategories();
+    event.returnValue = response.data;
+  });
 };
 
 const waitLoginStateChange = () => {

@@ -6,16 +6,11 @@ import {
 } from "../../../services/UbemiiService";
 import CourseCard from "../../../components/custom-components/CourseCard";
 import {Row} from "antd";
+import {useSelector} from "react-redux";
 
 const Home = () => {
-  const [courses, setCourses] = useState([]);
-  useEffect(() => {
-    getSubscribedCourses().then(async courses => {
-      const instructors = await getSubscribedInstructors();
-      const categories = await getSubscribedCourseCategories();
-      setCourses(courses);
-    });
-  }, []);
+  const {courses} = useSelector(state => state.courses);
+
   return (
     <div>
       <Row gutter={16}>

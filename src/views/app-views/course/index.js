@@ -4,6 +4,8 @@ import {Button, Card, Col, Collapse, Rate, Row, Tag} from "antd";
 import {useParams} from "react-router-dom";
 import {getCourseDetail} from "../../../services/UbemiiService";
 import Loading from "../../../components/shared-components/Loading";
+import {DownloadOutlined, CloudOutlined} from "@ant-design/icons";
+
 
 const { Panel } = Collapse;
 
@@ -74,7 +76,13 @@ const CourseDetail = () => {
                 padding: 16
               }}>
                 <h5>You have purchased this course.</h5>
-                <Button type="primary" block>Open this course in Browser</Button>
+                <Button icon={<CloudOutlined />} block style={{marginBottom: 16}} onClick={() => {
+                  const shell = window.require('electron').shell;
+                  shell.openExternal(`https://www.udemy.com/${courseId}`).then(r => {
+                    console.log("URL Opened");
+                  });
+                }}>Open this course in Browser</Button>
+                <Button icon={<DownloadOutlined />} type="primary" block>Download this course</Button>
               </div>
             </Card>
           </Col>

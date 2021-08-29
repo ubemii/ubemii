@@ -1,6 +1,7 @@
 {
 	"home": "Home",
-	
+	"downloads": "Downloads",
+
 	"sidenav.dashboard": "Dashboard",
 	"sidenav.dashboard.default": "Default",
 	"sidenav.dashboard.analytic": "Analytic",
@@ -88,13 +89,13 @@
 	"sidenav.components.feedback.result": "Result",
 	"sidenav.components.feedback.spin": "Spin",
 	"sidenav.components.feedback.skeleton": "Skeleton",
-	
+
 	"sidenav.components.other": "Other",
 	"sidenav.components.other.anchor": "Anchor",
 	"sidenav.components.other.backtop": "BackTop",
 	"sidenav.components.other.configProvider": "Config Provider",
 	"sidenav.components.other.divider": "Divider",
-	
+
 	"sidenav.charts": "Charts",
 	"sidenav.charts.apex": "Apex Charts",
 	"sidenav.charts.chartjs": "ChartJs",
@@ -102,7 +103,7 @@
 	"sidenav.maps": "Maps",
 	"sidenav.maps.google": "Google Maps",
 	"sidenav.maps.simple": "Simple Maps",
-	
+
 	"sidenav.pages": "Pages",
 	"sidenav.pages.profile": "Profile",
 	"sidenav.pages.invoice": "Invoice",

@@ -1,7 +1,6 @@
-const electron = window.require("electron")
-const Store = window.require('electron-store');
-const store = new Store();
+import {getData, setData} from "./StorageService";
 
+const electron = window.require("electron")
 
 export const getSubscribedCourses = async (limit = 50) => {
   const response = electron.ipcRenderer.sendSync("getSubscribedCourses");
@@ -22,19 +21,19 @@ export const getCourseDetail = async (courseId) => {
   const response = electron.ipcRenderer.sendSync("getCourseDetail", courseId);
   return (response || {});
 }
-export const getCourseLectures = async (courseId) => {
+export const getCourseLectures = async (courseId, forceReload = false) => {
   let lectures = [];
-  const lectureInfo = store.get('lectures-' + courseId);
+  const lectureInfo = getData('lectures-' + courseId, null);
   const reloadLectures = () => {
     console.log("Must reload lectures");
     const response = electron.ipcRenderer.sendSync("getCourseLectures", courseId);
     lectures = response.results || [];
-    store.set({
+    setData('lectures-' + courseId, {
       lastUpdated: new Date().getTime(),
       lectures: lectures
     });
   }
-  if (!lectureInfo) {
+  if (!lectureInfo || forceReload) {
     reloadLectures();
   } else {
     // will be cached for 24 hours.

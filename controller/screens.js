@@ -25,6 +25,21 @@ const createWindow = () => {
   return win;
 }
 
+const createCourseWindow = (courseURL) => {
+  const win = new BrowserWindow({
+    width: 1280,
+    height: 800,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    },
+  });
+  win.loadURL(`https://www.udemy.com${courseURL}learn/`).then(() => {
+    console.log("Udemy Course loaded.");
+  });
+  return win;
+}
+
 const createLoginWindow = () => {
   const win = new BrowserWindow({
     width: 600,
@@ -38,5 +53,6 @@ const createLoginWindow = () => {
 
 module.exports = {
   createWindow,
-  createLoginWindow
+  createLoginWindow,
+  createCourseWindow
 }

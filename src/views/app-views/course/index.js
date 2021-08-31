@@ -2,9 +2,10 @@ import React, {useEffect, useState, Suspense} from 'react'
 import CourseCard from "../../../components/custom-components/CourseCard";
 import {Button, Card, Col, Collapse, Rate, Row, Tag} from "antd";
 import {useParams} from "react-router-dom";
-import {getCourseDetail} from "../../../services/UbemiiService";
+import {getCourseDetail, getCourseLectures, openCourse} from "../../../services/UbemiiService";
 import Loading from "../../../components/shared-components/Loading";
 import {DownloadOutlined, CloudOutlined} from "@ant-design/icons";
+const shell = window.require('electron').shell;
 
 
 const { Panel } = Collapse;
@@ -12,11 +13,20 @@ const { Panel } = Collapse;
 const CourseDetail = () => {
   let { courseId } = useParams();
   const [courseDetail, setCourseDetail] = useState({});
+  const [lectures, setLectures] = useState([]);
   useEffect(async () => {
     const detail = await getCourseDetail(courseId);
-    console.log(detail);
     setCourseDetail(detail);
+    const lectures = await getCourseLectures(courseId);
+    console.log(lectures);
+    setLectures(lectures);
   }, []);
+
+  const openCourseInBrowser = () => {
+    shell.openExternal(`https://www.udemy.com/${courseId}`).then(r => {
+      console.log("URL Opened");
+    });
+  };
 
   return (
     <div>
@@ -62,26 +72,31 @@ const CourseDetail = () => {
                 </Panel>
               </Collapse>
             </Card>
+            {lectures.map(lecture => (
+              <Card>
+                <b>Lecture {lectures[0]['sort_order'] + 1 - lecture['sort_order']}: </b>
+                {lecture['title']}
+              </Card>
+            ))}
           </Col>
           <Col xs={8}>
             <Card bodyStyle={{
               padding: 0,
             }}>
-              <img src={courseDetail.image_240x135} style={{
+              <img src={courseDetail['image_240x135']} style={{
                 width: "100%",
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8
-              }}/>
+              }} alt={"Preview"}/>
               <div style={{
                 padding: 16
               }}>
                 <h5>You have purchased this course.</h5>
                 <Button icon={<CloudOutlined />} block style={{marginBottom: 16}} onClick={() => {
-                  const shell = window.require('electron').shell;
-                  shell.openExternal(`https://www.udemy.com/${courseId}`).then(r => {
-                    console.log("URL Opened");
+                  openCourse(courseDetail.url).then(() => {
+                    console.log("Course Opened");
                   });
-                }}>Open this course in Browser</Button>
+                }}>Open this course</Button>
                 <Button icon={<DownloadOutlined />} type="primary" block>Download this course</Button>
               </div>
             </Card>

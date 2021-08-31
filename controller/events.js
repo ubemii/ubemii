@@ -1,8 +1,10 @@
 const {BrowserWindow} = require("electron");
-const {createWindow, createLoginWindow} = require("./screens");
+const {createWindow, createLoginWindow, createCourseWindow} = require("./screens");
 const {GetLoginState} = require("./utils");
 const { ipcMain } = require('electron');
-const {GetSubscribedCourses, GetSubscribedInstructors, GetSubscribedCourseCategories, GetCourseDetail} = require("./Ubemii");
+const {GetSubscribedCourses, GetSubscribedInstructors, GetSubscribedCourseCategories, GetCourseDetail,
+  GetCourseLectures
+} = require("./Ubemii");
 
 const ipcListeners = () => {
   ipcMain.on('getSubscribedCourses', async (event, arg) => {
@@ -21,12 +23,19 @@ const ipcListeners = () => {
     const response = await GetCourseDetail(courseId);
     event.returnValue = response.data;
   });
+  ipcMain.on('getCourseLectures', async (event, courseId) => {
+    const response = await GetCourseLectures(courseId);
+    event.returnValue = response.data;
+  });
+  ipcMain.on('openCourse', async (event, courseURL) => {
+    createCourseWindow(courseURL);
+  });
 };
 
 const waitLoginStateChange = () => {
   return new Promise(_ => {
     const checkInterval = setInterval(() => {
-      getLoginState().then(state => {
+      GetLoginState().then(state => {
         if (state) {
           clearInterval(checkInterval);
           _();

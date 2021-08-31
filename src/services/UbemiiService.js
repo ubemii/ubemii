@@ -1,4 +1,6 @@
 const electron = window.require("electron")
+const Store = window.require('electron-store');
+const store = new Store();
 
 
 export const getSubscribedCourses = async (limit = 50) => {
@@ -19,4 +21,33 @@ export const getSubscribedCourseCategories = async () => {
 export const getCourseDetail = async (courseId) => {
   const response = electron.ipcRenderer.sendSync("getCourseDetail", courseId);
   return (response || {});
+}
+export const getCourseLectures = async (courseId) => {
+  let lectures = [];
+  const lectureInfo = store.get('lectures-' + courseId);
+  const reloadLectures = () => {
+    console.log("Must reload lectures");
+    const response = electron.ipcRenderer.sendSync("getCourseLectures", courseId);
+    lectures = response.results || [];
+    store.set({
+      lastUpdated: new Date().getTime(),
+      lectures: lectures
+    });
+  }
+  if (!lectureInfo) {
+    reloadLectures();
+  } else {
+    // will be cached for 24 hours.
+    if ((new Date().getTime() - lectureInfo.lastUpdated) > 24 * 3600 * 1000) {
+      reloadLectures();
+    } else {
+      lectures = lectureInfo.lectures;
+    }
+  }
+
+  return lectures;
+}
+
+export const openCourse = async (courseId) => {
+  return electron.ipcRenderer.send("openCourse", courseId);
 }

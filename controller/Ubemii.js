@@ -61,9 +61,9 @@ const GetCourseDetail = async (courseId) => {
 }
 
 const GetCourseChapters = async (courseId) => {
-  const params = `page_size=1400&fields[lecture]=title,object_index,is_published,sort_order,created,asset,supplementary_assets,is_free&fields[quiz]=title,object_index,is_published,sort_order,type&fields[practice]=title,object_index,is_published,sort_order&fields[chapter]=title,object_index,is_published,sort_order&fields[asset]=title,filename,asset_type,status,time_estimation,is_external&caching_intent=True`;
+  const params = `fields[asset]=results,title,external_url,time_estimation,download_urls,slide_urls,filename,asset_type,captions,media_license_token,course_is_drmed,media_sources,stream_urls,body&fields[chapter]=object_index,title,sort_order&fields[lecture]=id,title,object_index,asset,supplementary_assets,view_html&page_size=10000`;
   const token = await GetUdemyToken();
-  return await axios.get(UDEMY_API_BASE + `/courses/${courseId}/subscriber-curriculum-items/?` + params, {
+  return await axios.get(UDEMY_API_BASE + `/courses/${courseId}/cached-subscriber-curriculum-items/?` + params, {
     headers: {
       "authorization": "Bearer " + token,
       "x-udemy-authorization": "Bearer " + token,

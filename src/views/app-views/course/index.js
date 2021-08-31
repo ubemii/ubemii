@@ -5,6 +5,7 @@ import {useParams} from "react-router-dom";
 import {getCourseDetail, getCourseLectures, openCourse} from "../../../services/UbemiiService";
 import Loading from "../../../components/shared-components/Loading";
 import {DownloadOutlined, CloudOutlined} from "@ant-design/icons";
+import CourseLecturesList from "../../../components/custom-components/CourseLecturesList";
 const shell = window.require('electron').shell;
 
 
@@ -72,12 +73,17 @@ const CourseDetail = () => {
                 </Panel>
               </Collapse>
             </Card>
-            {lectures.map(lecture => (
-              <Card>
-                <b>Lecture {lectures[0]['sort_order'] + 1 - lecture['sort_order']}: </b>
-                {lecture['title']}
-              </Card>
-            ))}
+            <Card>
+              <CourseLecturesList lectures={lectures.map(lecture => {
+                lecture.index = lectures[0]['sort_order'] + 1 - lecture['sort_order'];
+                return lecture;
+              })}/>
+            </Card>
+            {/*{lectures.map(lecture => (*/}
+            {/*  */}
+            {/*    <b>Lecture {lectures[0]['sort_order'] + 1 - lecture['sort_order']}: </b>*/}
+            {/*    {lecture['title']}*/}
+            {/*))}*/}
           </Col>
           <Col xs={8}>
             <Card bodyStyle={{

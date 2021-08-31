@@ -9,6 +9,7 @@ import {
   VideoCameraOutlined,
   PaperClipOutlined
 } from "@ant-design/icons";
+import {parseUdemyDownload} from "../../services/DownloadService";
 
 const CourseChaptersList = (props) => {
   const [selectedRowKeys, setSelectedRows] = useState([]);
@@ -67,11 +68,12 @@ const CourseChaptersList = (props) => {
     }
   }, {
     title: 'Action',
-    render: column => {
-      console.log(column);
+    render: lecture => {
       return (
         <div>
-          <Button type={"primary"}>
+          <Button type={"primary"} onClick={() => {
+            parseUdemyDownload(lecture);
+          }}>
             <DownloadOutlined/>
           </Button>
         </div>

@@ -21,30 +21,30 @@ export const getCourseDetail = async (courseId) => {
   const response = electron.ipcRenderer.sendSync("getCourseDetail", courseId);
   return (response || {});
 }
-export const getCourseLectures = async (courseId, forceReload = false) => {
-  let lectures = [];
-  const lectureInfo = getData('lectures-' + courseId, null);
-  const reloadLectures = () => {
-    console.log("Must reload lectures");
-    const response = electron.ipcRenderer.sendSync("getCourseLectures", courseId);
-    lectures = response.results || [];
-    setData('lectures-' + courseId, {
+export const getCourseChapters = async (courseId, forceReload = false) => {
+  let chapters = [];
+  const chapterInfo = getData('chapters-' + courseId, null);
+  const reloadChapters = () => {
+    console.log("Must reload chapters");
+    const response = electron.ipcRenderer.sendSync("getCourseChapters", courseId);
+    chapters = response.results || [];
+    setData('chapters-' + courseId, {
       lastUpdated: new Date().getTime(),
-      lectures: lectures
+      chapters: chapters
     });
   }
-  if (!lectureInfo || forceReload) {
-    reloadLectures();
+  if (!chapterInfo || forceReload) {
+    reloadChapters();
   } else {
     // will be cached for 24 hours.
-    if ((new Date().getTime() - lectureInfo.lastUpdated) > 24 * 3600 * 1000) {
-      reloadLectures();
+    if ((new Date().getTime() - chapterInfo.lastUpdated) > 24 * 3600 * 1000) {
+      reloadChapters();
     } else {
-      lectures = lectureInfo.lectures;
+      chapters = chapterInfo.chapters;
     }
   }
 
-  return lectures;
+  return chapters;
 }
 
 export const openCourse = async (courseId) => {

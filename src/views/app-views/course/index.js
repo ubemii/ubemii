@@ -2,10 +2,10 @@ import React, {useEffect, useState, Suspense} from 'react'
 import CourseCard from "../../../components/custom-components/CourseCard";
 import {Button, Card, Col, Collapse, Rate, Row, Tag} from "antd";
 import {useParams} from "react-router-dom";
-import {getCourseDetail, getCourseLectures, openCourse} from "../../../services/UbemiiService";
+import {getCourseChapters, getCourseDetail, openCourse} from "../../../services/UbemiiService";
 import Loading from "../../../components/shared-components/Loading";
 import {DownloadOutlined, CloudOutlined} from "@ant-design/icons";
-import CourseLecturesList from "../../../components/custom-components/CourseLecturesList";
+import CourseChaptersList from "../../../components/custom-components/CourseChaptersList";
 const shell = window.require('electron').shell;
 
 
@@ -18,7 +18,7 @@ const CourseDetail = () => {
   useEffect(async () => {
     const detail = await getCourseDetail(courseId);
     setCourseDetail(detail);
-    const lectures = await getCourseLectures(courseId);
+    const lectures = await getCourseChapters(courseId);
     console.log(lectures);
     setLectures(lectures);
   }, []);
@@ -74,7 +74,7 @@ const CourseDetail = () => {
               </Collapse>
             </Card>
             <Card>
-              <CourseLecturesList lectures={lectures.map(lecture => {
+              <CourseChaptersList lectures={lectures.map(lecture => {
                 lecture.index = lectures[0]['sort_order'] + 1 - lecture['sort_order'];
                 return lecture;
               })}/>

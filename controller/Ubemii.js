@@ -60,7 +60,7 @@ const GetCourseDetail = async (courseId) => {
   });
 }
 
-const GetCourseLectures = async (courseId) => {
+const GetCourseChapters = async (courseId) => {
   const params = `page_size=1400&fields[lecture]=title,object_index,is_published,sort_order,created,asset,supplementary_assets,is_free&fields[quiz]=title,object_index,is_published,sort_order,type&fields[practice]=title,object_index,is_published,sort_order&fields[chapter]=title,object_index,is_published,sort_order&fields[asset]=title,filename,asset_type,status,time_estimation,is_external&caching_intent=True`;
   const token = await GetUdemyToken();
   return await axios.get(UDEMY_API_BASE + `/courses/${courseId}/subscriber-curriculum-items/?` + params, {
@@ -80,5 +80,5 @@ module.exports = {
   GetSubscribedCourseCategories,
   GetSubscribedInstructors,
   GetCourseDetail,
-  GetCourseLectures
+  GetCourseChapters
 }

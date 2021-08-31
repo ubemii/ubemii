@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Button, Table} from "antd";
 import {DownloadOutlined} from "@ant-design/icons";
 
-const CourseLecturesList = (props) => {
+const CourseChaptersList = (props) => {
   const [selectedRowKeys, setSelectedRows] = useState([]);
   const columns = [{
     title: 'Index',
@@ -43,4 +43,4 @@ const CourseLecturesList = (props) => {
   );
 };
 
-export default CourseLecturesList;
+export default CourseChaptersList;

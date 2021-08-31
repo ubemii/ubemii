@@ -3,7 +3,7 @@ const {createWindow, createLoginWindow, createCourseWindow} = require("./screens
 const {GetLoginState} = require("./utils");
 const { ipcMain } = require('electron');
 const {GetSubscribedCourses, GetSubscribedInstructors, GetSubscribedCourseCategories, GetCourseDetail,
-  GetCourseLectures
+  GetCourseChapters
 } = require("./Ubemii");
 
 const ipcListeners = () => {
@@ -23,8 +23,8 @@ const ipcListeners = () => {
     const response = await GetCourseDetail(courseId);
     event.returnValue = response.data;
   });
-  ipcMain.on('getCourseLectures', async (event, courseId) => {
-    const response = await GetCourseLectures(courseId);
+  ipcMain.on('getCourseChapters', async (event, courseId) => {
+    const response = await GetCourseChapters(courseId);
     event.returnValue = response.data;
   });
   ipcMain.on('openCourse', async (event, courseURL) => {

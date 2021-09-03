@@ -6,6 +6,13 @@ const GetCookies = async () => {
   });
 }
 
+const GetCookieString = async () => {
+  const cookies = await GetCookies();
+  return cookies.map(c => {
+    return c.name + "=" + c.value;
+  }).join("; ");
+}
+
 const GetLoginState = async () => {
   const cookies = await GetCookies();
   const accessTokenCookie = cookies.find(x => x.name === "access_token");
@@ -15,4 +22,5 @@ const GetLoginState = async () => {
 module.exports = {
   GetCookies,
   GetLoginState,
+  GetCookieString
 }

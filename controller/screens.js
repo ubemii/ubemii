@@ -1,6 +1,7 @@
 const {BrowserWindow} = require("electron");
 const isDev = require("electron-is-dev");
 const path = require("path");
+const {GetCookies} = require("./utils");
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -11,6 +12,7 @@ const createWindow = () => {
       contextIsolation: false
     },
   });
+
   win.loadURL(
     isDev
       ? 'http://localhost:3000'

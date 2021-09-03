@@ -2,7 +2,7 @@ import React, {useEffect, useState, Suspense} from 'react'
 import CourseCard from "../../../components/custom-components/CourseCard";
 import {Button, Card, Col, Collapse, Rate, Row, Tag} from "antd";
 import {useParams} from "react-router-dom";
-import {getCourseChapters, getCourseDetail, openCourse} from "../../../services/UbemiiService";
+import {getCourseLectures, getCourseDetail, openCourse, getLectureDetail} from "../../../services/UbemiiService";
 import Loading from "../../../components/shared-components/Loading";
 import {DownloadOutlined, CloudOutlined} from "@ant-design/icons";
 import CourseChaptersList from "../../../components/custom-components/CourseChaptersList";
@@ -16,11 +16,12 @@ const CourseDetail = () => {
   const [courseDetail, setCourseDetail] = useState({});
   const [lectures, setLectures] = useState([]);
   useEffect(async () => {
-    const detail = await getCourseDetail(courseId);
-    setCourseDetail(detail);
-    const lectures = await getCourseChapters(courseId);
-    console.log(lectures);
-    setLectures(lectures);
+    getCourseDetail(courseId).then(detail => {
+      setCourseDetail(detail);
+    });
+    getCourseLectures(courseId).then(lectures => {
+      setLectures(lectures);
+    });
   }, []);
 
   const openCourseInBrowser = () => {

@@ -3,10 +3,17 @@ const {createWindow, createLoginWindow, createCourseWindow} = require("./screens
 const {GetLoginState} = require("./utils");
 const { ipcMain } = require('electron');
 const {GetSubscribedCourses, GetSubscribedInstructors, GetSubscribedCourseCategories, GetCourseDetail,
-  GetCourseChapters
+  GetCourseLectures, GetUdemyToken, UdemyApi,
 } = require("./Ubemii");
+const {download} = require("./downloader");
+const {session} = require("electron");
 
 const ipcListeners = () => {
+  ipcMain.on('UdemyApi', async (event, arg) => {
+    console.log(typeof arg, arg);
+    const response = await UdemyApi(arg);
+    event.returnValue = response.data;
+  });
   ipcMain.on('getSubscribedCourses', async (event, arg) => {
     const response = await GetSubscribedCourses();
     event.returnValue = response.data;
@@ -23,12 +30,19 @@ const ipcListeners = () => {
     const response = await GetCourseDetail(courseId);
     event.returnValue = response.data;
   });
-  ipcMain.on('getCourseChapters', async (event, courseId) => {
-    const response = await GetCourseChapters(courseId);
+  ipcMain.on('getCourseLectures', async (event, courseId) => {
+    const response = await GetCourseLectures(courseId);
     event.returnValue = response.data;
+  });
+  ipcMain.on('getToken', async (event, courseId) => {
+    const response = await GetUdemyToken();
+    event.returnValue = response;
   });
   ipcMain.on('openCourse', async (event, courseURL) => {
     createCourseWindow(courseURL);
+  });
+  ipcMain.on('addDownloadTask', async (event, tasks) => {
+    download(tasks[0]);
   });
 };
 

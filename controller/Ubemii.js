@@ -2,6 +2,24 @@ const axios = require("axios");
 const {GetCookies, GetLoginState} = require("./utils");
 const UDEMY_API_BASE = "https://www.udemy.com/api-2.0";
 
+const UdemyApi = async (options) => {
+  const token = await GetUdemyToken();
+  const extraHeaders = options.headers || {};
+  return axios({
+    method: options.method,
+    url: options.url,
+    headers: {
+      "authorization": "Bearer " + token,
+      "x-udemy-authorization": "Bearer " + token,
+      "origin": "https://www.udemy.com",
+      "referer": "https://www.udemy.com",
+      "cookie": await GetCookies(),
+      ...extraHeaders
+    },
+    data: options.data
+  });
+}
+
 const GetUdemyToken = async () => {
   if (await GetLoginState()) {
     const cookies = await GetCookies();
@@ -18,7 +36,7 @@ const GetSubscribedCourses = async (limit) => {
     headers: {
       "authorization": "Bearer " + token,
       "x-udemy-authorization": "Bearer " + token,
-      "origin": "https://www.udemy.com"
+      "origin": "https://www.udemy.com",
     }
   });
 }
@@ -60,7 +78,7 @@ const GetCourseDetail = async (courseId) => {
   });
 }
 
-const GetCourseChapters = async (courseId) => {
+const GetCourseLectures = async (courseId) => {
   const params = `fields[asset]=results,title,external_url,time_estimation,download_urls,slide_urls,filename,asset_type,captions,media_license_token,course_is_drmed,media_sources,stream_urls,body&fields[chapter]=object_index,title,sort_order&fields[lecture]=id,title,object_index,asset,supplementary_assets,view_html&page_size=10000`;
   const token = await GetUdemyToken();
   return await axios.get(UDEMY_API_BASE + `/courses/${courseId}/cached-subscriber-curriculum-items/?` + params, {
@@ -80,5 +98,6 @@ module.exports = {
   GetSubscribedCourseCategories,
   GetSubscribedInstructors,
   GetCourseDetail,
-  GetCourseChapters
+  GetCourseLectures,
+  UdemyApi
 }

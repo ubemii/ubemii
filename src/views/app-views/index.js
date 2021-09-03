@@ -5,15 +5,22 @@ import { APP_PREFIX_PATH } from 'configs/AppConfig'
 import {
   getSubscribedCourseCategories,
   getSubscribedCourses,
-  getSubscribedInstructors
+  getSubscribedInstructors, getToken
 } from "../../services/UbemiiService";
 import {setSubscribedCategories, setSubscribedCourses, setSubscribedInstructors} from "../../redux/actions";
+import {useDispatch} from "react-redux";
+import {authenticated} from "../../redux/actions/Auth";
 
 export const AppViews = () => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     getSubscribedCourses().then(async courses => {
       const instructors = await getSubscribedInstructors();
       const categories = await getSubscribedCourseCategories();
+      const token = await getToken();
+      dispatch(authenticated(token));
+
       setSubscribedCourses(courses);
       setSubscribedInstructors(instructors);
       setSubscribedCategories(categories);
